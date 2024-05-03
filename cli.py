@@ -5,14 +5,10 @@ from bfv.bfv import BFV, RLWE
 from bfv.discrete_gauss import DiscreteGaussian
 import time
 
-
-
 def main(args):
     n = args.n
     q = args.q
     t = args.t
-    sigma = 3.2  # standard deviation of the discrete Gaussian distribution
-
     sigma = 3.2  # standard deviation of the discrete Gaussian distribution
 
     # Initialize the DiscreteGaussian distribution
@@ -29,14 +25,11 @@ def main(args):
 
     # Generate secret and public key
     secret_key = bfv.SecretKeyGen()
-    secret_key = bfv.SecretKeyGen()
 
-    pk_gen_start_time = time.time()
     pk_gen_start_time = time.time()
 
     public_key = bfv.PublicKeyGen(secret_key, e, a)
 
-    pk_gen_end_time = time.time()
     pk_gen_end_time = time.time()
     pk_gen_elapsed_time = pk_gen_end_time - pk_gen_start_time
 
@@ -50,7 +43,6 @@ def main(args):
 
     # Add zeroes at the beginning of the message polynomial to make it the same degree as the public key
     message.coefficients = message.coefficients = [0] * (n - len(message.coefficients)) + u.coefficients
-
 
     encrypt_start_time = time.time()
 
