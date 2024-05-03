@@ -8,10 +8,6 @@ Python implementation of the BFV scheme of FHE. Only for educational purposes.
 - [Revisiting Homomorphic Encryption Schemes for Finite Fields](https://eprint.iacr.org/2021/204.pdf).
 - [Somewhat Practical Fully Homomorphic Encryption](https://eprint.iacr.org/2012/144.pdf)
 - [An Improved RNS Variant of the BFV Homomorphic Encryption Scheme](https://eprint.iacr.org/2018/117)
-- [Introduction to the BFV FHE Scheme](https://inferati.azureedge.net/docs/inferati-fhe-bfv.pdf)
-- [Revisiting Homomorphic Encryption Schemes for Finite Fields](https://eprint.iacr.org/2021/204.pdf).
-- [Somewhat Practical Fully Homomorphic Encryption](https://eprint.iacr.org/2012/144.pdf)
-- [An Improved RNS Variant of the BFV Homomorphic Encryption Scheme](https://eprint.iacr.org/2018/117)
 - [Jay's explanation](https://github.com/Janmajayamall/bfv/blob/notes/notes/BFV.md)
 
 ### Test
