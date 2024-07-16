@@ -80,6 +80,9 @@ class Polynomial:
 
     def __add__(self, other) -> "Polynomial":
         return Polynomial(poly_add(self.coefficients, other.coefficients))
+    
+    def __sub__(self, other) -> "Polynomial":
+        return Polynomial(poly_sub(self.coefficients, other.coefficients))
 
     def __mul__(self, other) -> "Polynomial":
         return Polynomial(poly_mul_naive(self.coefficients, other.coefficients))
@@ -160,6 +163,18 @@ def poly_add(poly1: list[int], poly2: list[int]) -> list[int]:
     
     return result
 
+def poly_sub(poly1: list[int], poly2: list[int]) -> list[int]:
+    # Find the length of the longer polynomial
+    max_length = max(len(poly1), len(poly2))
+    
+    # Pad the shorter polynomial with zeros at the beginning
+    poly1 = [0] * (max_length - len(poly1)) + poly1
+    poly2 = [0] * (max_length - len(poly2)) + poly2
+    
+    result = [poly1[i] - poly2[i] for i in range(max_length)]
+    
+    return result
+    
 def get_centered_remainder(x, modulus) -> int:
     """
     Returns the centered remainder of x with respect to modulus.

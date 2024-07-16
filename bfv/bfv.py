@@ -323,6 +323,31 @@ class BFV:
 
         return (ct0, ct1)
     
+    def EvalSub(
+        self,
+        ciphertext1: tuple[Polynomial, Polynomial],
+        ciphertext2: tuple[Polynomial, Polynomial],
+    ):
+        """
+        Subtract two ciphertexts.
+
+        Parameters:
+        - ciphertext1: First ciphertext.
+        - ciphertext2: Second ciphertext.
+
+        Returns:
+        ciphertext_difference: Difference of the two ciphertexts.
+        """
+        # ct1_0 - ct2_0
+        ct0 = ciphertext1[0] - ciphertext2[0]
+        ct0.reduce_in_ring(self.rlwe.Rq)
+
+        # ct1_1 - ct2_1
+        ct1 = ciphertext1[1] - ciphertext2[1]
+        ct1.reduce_in_ring(self.rlwe.Rq)
+
+        return (ct0, ct1)
+    
 class BFVCrt:
     def __init__(self, crt_moduli: CRTModuli, n: int, t: int, discrete_gauss: DiscreteGaussian):
         """

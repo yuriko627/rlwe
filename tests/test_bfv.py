@@ -229,6 +229,60 @@ class TestBFV(unittest.TestCase):
         for i in range(len(message_sum.coefficients)):
             self.assertEqual(message_sum.coefficients[i], dec.coefficients[i])
 
+    def test_eval_sub(self):
+        secret_key = self.bfv.SecretKeyGen()
+        e = self.bfv.rlwe.SampleFromErrorDistribution()
+        a = self.bfv.rlwe.Rq.sample_polynomial()
+        public_key = self.bfv.PublicKeyGen(secret_key, e, a)
+
+        message1 = self.bfv.rlwe.Rt.sample_polynomial()
+        message2 = self.bfv.rlwe.Rt.sample_polynomial()
+        message_sub = message1 - message2
+        message_sub.reduce_in_ring(self.bfv.rlwe.Rt)
+
+        e0_1 = self.bfv.rlwe.SampleFromErrorDistribution()
+        e1_1 = self.bfv.rlwe.SampleFromErrorDistribution()
+        u_1 = self.bfv.rlwe.SampleFromTernaryDistribution()
+
+        ciphertext1 = self.bfv.PubKeyEncrypt(
+            public_key, message1, e0_1, e1_1, u_1
+        )
+
+        e0_2 = self.bfv.rlwe.SampleFromErrorDistribution()
+        e1_2 = self.bfv.rlwe.SampleFromErrorDistribution()
+        u_2 = self.bfv.rlwe.SampleFromTernaryDistribution()
+
+        ciphertext2 = self.bfv.PubKeyEncrypt(
+            public_key, message2, e0_2, e1_2, u_2
+        )
+
+        ciphertext_sub = self.bfv.EvalSub(ciphertext1, ciphertext2)
+
+        # Ensure that the ciphertext_sub is a polynomial in Rq
+        # Ensure that the ciphertext_sub of the ciphertext are within the range [-(q-1)/2, (q-1)/2]
+        lower_bound = -(self.bfv.rlwe.Rq.modulus - 1) / 2 # inclusive
+        upper_bound = (self.bfv.rlwe.Rq.modulus - 1) / 2 # inclusive
+
+        for coeff in ciphertext_sub[0].coefficients:
+            self.assertTrue(
+                coeff >= lower_bound
+                and coeff <= upper_bound
+            )
+        for coeff in ciphertext_sub[1].coefficients:
+            self.assertTrue(
+                coeff >= lower_bound
+                and coeff <= upper_bound
+            )
+        # Ensure that the degree of the ciphertext_sub is at most n-1, which means the has at most n coefficients
+        self.assertTrue(len(ciphertext_sub[0].coefficients) <= self.bfv.rlwe.n)
+
+        # decrypt ciphertext_sub
+        dec = self.bfv.Decrypt(secret_key, ciphertext_sub)
+
+        # ensure that message_sub and dec are the same
+        for i in range(len(message_sub.coefficients)):
+            self.assertEqual(message_sub.coefficients[i], dec.coefficients[i])
+
     def test_eval_const_add(self):
         secret_key = self.bfv.SecretKeyGen()
         e = self.bfv.rlwe.SampleFromErrorDistribution()
